@@ -92,7 +92,7 @@ python3 --version
 # 📥 Clone Repository
 
 ```bash
-git clone https://github.com/Gagan47raj/Flask-Development.git
+git clone https://github.com/suprit2005/Flask_Development.git
 ```
 
 Move inside the project
