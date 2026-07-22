@@ -1,40 +1,45 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
 
-<div class="card">
-  <div class="card-header">
-    <h3>Add Employee</h3>
+{% block content %}
+<div class="card border-0 shadow-sm col-md-8 mx-auto my-4">
+  <div class="card-header bg-primary text-white py-3">
+    <h4 class="mb-0 fw-bold">Register New Employee</h4>
   </div>
 
-  <div class="card-body">
-    <form action="/employee/add" method="POST">
+  <div class="card-body p-4">
+    <form action="{{ url_for('employee.employeeAdd') }}" method="POST">
         <div class="mb-3">
-            <label>Name : </label>
-            <input type="text" name="name" class="form-control px-4" required>
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" name="name" class="form-control" placeholder="e.g. John Doe" required>
         </div>
 
         <div class="mb-3">
-            <label>Email : </label>
-            <input type="email" name="email" class="form-control px-4" required>
+            <label class="form-label fw-semibold">Email Address</label>
+            <input type="email" name="email" class="form-control" placeholder="e.g. john@example.com" required>
         </div>
 
         <div class="mb-3">
-            <label>Password : </label>
-            <input type="text" name="password" class="form-control px-4" required>
+            <label class="form-label fw-semibold">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter password" required>
         </div>
 
         <div class="mb-3">
-            <label>Salary : </label>
-            <input type="text" name="salary" class="form-control px-4" required>
-        </div>
-        <div class="mb-3">
-            <label>Department : </label>
-            <input type="text" name="department" class="form-control px-4" required>
+            <label class="form-label fw-semibold">Salary ($)</label>
+            <input type="number" step="any" min="0" name="salary" class="form-control" placeholder="e.g. 60000" required>
         </div>
 
-        <button class="btn btn-success"> Submit </button>
-        <button class="btn btn-primary"> Reset </button>
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Department</label>
+            <input type="text" name="department" class="form-control" placeholder="e.g. IT, HR, Finance" required>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success px-4">Submit</button>
+            <button type="reset" class="btn btn-secondary px-4">Reset</button>
+            <a href="{{ url_for('employee.employee_list') }}" class="btn btn-outline-dark px-4 ms-auto">Cancel</a>
+        </div>
     </form>
   </div>
 </div>
-
 {% endblock %}
+

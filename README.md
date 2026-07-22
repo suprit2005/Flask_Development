@@ -1,8 +1,34 @@
-# Flask Development 🚀
+# Flask Development 🚀 — Employee Management System (EMS)
 
-A beginner-friendly Flask development repository containing step-by-step examples for learning Flask, Jinja2 templates, Static Files, SQLAlchemy, Blueprints, Authentication, CRUD operations, File Uploads, and more.
+A full-featured Flask web application with SQLAlchemy ORM, Jinja2 templates, and Bootstrap 5 UI, built for managing employee records with advanced Search, Filtering, Sorting, and Pagination.
 
-This repository is designed for students and developers who want to master Flask from scratch and build production-ready web applications.
+---
+
+## ✨ Features Implemented
+
+### 1. 🔍 Search
+- Case-insensitive search across **Employee Name**, **Email**, and **Department** using `sqlalchemy.or_` and `.ilike()`.
+- Search term retention and clear button.
+
+### 2. 🔀 Whitelisted Sorting
+- Sort employees by **Name**, **Email**, **Department**, **Salary**, or **ID**.
+- Supports **Ascending** (`asc`) and **Descending** (`desc`) ordering.
+- Clickable table column headers with dynamic sort direction indicators (`↑` / `↓`).
+- Column parameters are strictly whitelisted to prevent invalid inputs.
+
+### 3. 🎯 Filtering
+- **Dynamic Department Selection**: Populates filter options directly from existing database records (`Employee.department.distinct()`).
+- **Validated Salary Bounds**: Supports Minimum Salary (`min_salary`) and Maximum Salary (`max_salary`) range bounds with numeric type parsing and range validation.
+
+### 4. 📄 Pagination & Parameter Preservation
+- Configurable page limits (**5** or **10** records per page).
+- **Previous** / **Next** controls, page numbers, current page indicator, and total record count badge.
+- **Parameter Preservation**: All active search terms, filter selections, sort options, and page sizes remain attached to URL parameters while navigating between pages (e.g. `?search=dev&department=IT&min_salary=50000&sort_by=salary&order=desc&page=2&per_page=5`).
+
+### 5. 🎨 Modern Bootstrap 5 UI
+- Styled directory cards, filter control panels, responsive tables, badge highlights, and custom form cards.
+- Dismissible Flask flash messages for **Add**, **Update**, and **Delete** actions.
+- "No records found" fallback banner with filter reset action.
 
 ---
 
@@ -10,22 +36,36 @@ This repository is designed for students and developers who want to master Flask
 
 ```
 Flask-Development/
-│
 ├── app/
 │   ├── models/
+│   │   ├── __init__.py           # Instantiates db = SQLAlchemy(), imports Employee
+│   │   └── employee.py           # Employee SQLAlchemy model schema
 │   ├── routes/
-│   ├── templates/
+│   │   ├── __init__.py           # Package marker
+│   │   ├── auth.py               # Authentication routes
+│   │   ├── department.py         # department_bp blueprint
+│   │   ├── employee.py           # employee_bp blueprint with Search, Filter, Sort, Pagination & CRUD
+│   │   └── home.py               # home_bp blueprint
 │   ├── static/
-│   ├── forms/
-│   ├── utils/
-│   └── __init__.py
-│
-├── uploads/
-├── config.py
-├── requirements.txt
-├── run.py
-└── README.md
+│   │   ├── css/                  # Custom CSS styles
+│   │   └── js/                   # Custom JavaScript scripts
+│   ├── templates/
+│   │   ├── add_employee.html     # Registration form template
+│   │   ├── base.html             # Base layout with Bootstrap 5 CDN & flash alerts
+│   │   ├── department.html       # Department page template
+│   │   ├── employee.html         # Directory view with Search, Filter, Sort & Pagination
+│   │   ├── employee_detail.html   # Employee detail view template
+│   │   ├── home.html             # Landing page template
+│   │   ├── navbar.html           # Bootstrap top navigation bar
+│   │   └── update_employee.html  # Employee update form template
+│   └── utils/
+│       └── __init__.py           # Utility modules
+├── app.py                        # Entry point starting create_app()
+├── config.py                     # App configuration (database URI, SECRET_KEY)
+├── requirements.txt              # Dependencies list
+└── README.md                     # Project documentation
 ```
+
 
 ---
 
