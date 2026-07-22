@@ -366,18 +366,3 @@ git push origin feature-name
 5. Create a Pull Request
 
 ---
-
-# ⭐ Support
-
-If this repository helped you learn Flask, consider giving it a ⭐ on GitHub.
-
----
-
-# 👨‍💻 Author
-
-**Gagan Rajput**
-
-GitHub:
-https://github.com/Gagan47raj
-
-Happy Coding! 🚀
