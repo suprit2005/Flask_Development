@@ -22,6 +22,14 @@ def create_app():
 
     #flask migrate
     migrate.init_app(app,db)
+
+    with app.app_context():
+        try:
+            db.create_all()
+        except Exception as e:
+            app.logger.warning(f"Database initialization deferred: {e}")
+
+
     
     app.register_blueprint(home_bp)
     app.register_blueprint(employee_bp)

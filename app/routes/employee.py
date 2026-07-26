@@ -104,53 +104,73 @@ from app.models import db
 
 @employee_bp.route("/employee/add", methods=["POST", "GET"])
 def employeeAdd():
-
     if request.method == "POST":
+        email = request.form.get("email", "").strip()
 
-        employee = Employee(
-            name = request.form["name"],
-            email = request.form["email"],
-            password = request.form["password"],
-            salary = request.form["salary"],
-            department = request.form["department"]
-        )
+        # Check if email is already registered
+        existing_emp = Employee.query.filter_by(email=email).first()
+        if existing_emp:
+            flash(f"An employee with email '{email}' already exists!", "danger")
+            return render_template("add_employee.html", form_data=request.form)
 
-        db.session.add(employee)
-        db.session.commit()
+        try:
+            employee = Employee(
+                name=request.form["name"].strip(),
+                email=email,
+                password=request.form["password"],
+                salary=request.form["salary"],
+                department=request.form["department"].strip()
+            )
+            db.session.add(employee)
+            db.session.commit()
 
-        flash(f"Employee '{employee.name}' registered successfully!", "success")
-        return redirect(url_for("employee.employee_list"))
+            flash(f"Employee '{employee.name}' registered successfully!", "success")
+            return redirect(url_for("employee.employee_list"))
+        except Exception as e:
+            db.session.rollback()
+            flash("An error occurred while registering the employee. Please check your inputs.", "danger")
+            return render_template("add_employee.html", form_data=request.form)
     
     return render_template("add_employee.html")
 
 #get specific employee
 @employee_bp.route("/employee/employeeDetail/<int:id>", methods=["GET"])
 def employeeDetail(id):
-
     employee = Employee.query.get_or_404(id)
-
-    return render_template("employee_detail.html", employee = employee)
+    return render_template("employee_detail.html", employee=employee)
 
 
 @employee_bp.route("/employee/employeeUpdate/<int:id>", methods=["POST", "GET"])
 def employeeUpdate(id):
-
     employee = Employee.query.get_or_404(id)
 
     if request.method == "POST":
+        email = request.form.get("email", "").strip()
 
-        employee.name = request.form["name"]
-        employee.email = request.form["email"]
-        employee.password = request.form["password"]
-        employee.salary = request.form["salary"]
-        employee.department = request.form["department"]
+        # Check if another employee already has this email
+        existing_emp = Employee.query.filter(Employee.email == email, Employee.id != id).first()
+        if existing_emp:
+            flash(f"An employee with email '{email}' already exists!", "danger")
+            return render_template("update_employee.html", employee=employee)
 
-        db.session.commit()
+        try:
+            employee.name = request.form["name"].strip()
+            employee.email = email
+            employee.password = request.form["password"]
+            employee.salary = request.form["salary"]
+            employee.department = request.form["department"].strip()
 
-        flash(f"Employee '{employee.name}' updated successfully!", "info")
-        return redirect(url_for("employee.employee_list"))
+            db.session.commit()
+
+            flash(f"Employee '{employee.name}' updated successfully!", "info")
+            return redirect(url_for("employee.employee_list"))
+        except Exception as e:
+            db.session.rollback()
+            flash("An error occurred while updating the employee record.", "danger")
+            return render_template("update_employee.html", employee=employee)
 
     return render_template("update_employee.html", employee=employee)
+
 
 
 @employee_bp.route("/employee/employeeDelete/<int:id>")

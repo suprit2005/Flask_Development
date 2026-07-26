@@ -1,34 +1,57 @@
-# Flask Development 🚀 — Employee Management System (EMS)
+# Flask Development 🚀 — Advanced Employee Management System (EMS)
 
-A full-featured Flask web application with SQLAlchemy ORM, Jinja2 templates, and Bootstrap 5 UI, built for managing employee records with advanced Search, Filtering, Sorting, and Pagination.
+A full-featured Flask web application built with **Flask**, **SQLAlchemy ORM**, **Flask-Migrate**, **MySQL**, **Jinja2 templates**, and **Bootstrap 5 UI**, implementing advanced Search, Filtering, Sorting, and Pagination.
 
 ---
 
 ## ✨ Features Implemented
 
-### 1. 🔍 Search
+### 1. 🔍 Searching
 - Case-insensitive search across **Employee Name**, **Email**, and **Department** using `sqlalchemy.or_` and `.ilike()`.
-- Search term retention and clear button.
+- Search term retention and filter reset controls.
 
 ### 2. 🔀 Whitelisted Sorting
 - Sort employees by **Name**, **Email**, **Department**, **Salary**, or **ID**.
 - Supports **Ascending** (`asc`) and **Descending** (`desc`) ordering.
 - Clickable table column headers with dynamic sort direction indicators (`↑` / `↓`).
-- Column parameters are strictly whitelisted to prevent invalid inputs.
 
-### 3. 🎯 Filtering
-- **Dynamic Department Selection**: Populates filter options directly from existing database records (`Employee.department.distinct()`).
-- **Validated Salary Bounds**: Supports Minimum Salary (`min_salary`) and Maximum Salary (`max_salary`) range bounds with numeric type parsing and range validation.
+### 3. 🎯 Advanced Filtering
+- **Dynamic Department Selection**: Populates filter options directly from database records (`Employee.department.distinct()`).
+- **Validated Salary Bounds**: Supports Minimum Salary (`min_salary`) and Maximum Salary (`max_salary`) range bounds.
 
 ### 4. 📄 Pagination & Parameter Preservation
 - Configurable page limits (**5** or **10** records per page).
 - **Previous** / **Next** controls, page numbers, current page indicator, and total record count badge.
-- **Parameter Preservation**: All active search terms, filter selections, sort options, and page sizes remain attached to URL parameters while navigating between pages (e.g. `?search=dev&department=IT&min_salary=50000&sort_by=salary&order=desc&page=2&per_page=5`).
+- **Parameter Preservation**: All active search terms, filter selections, sort options, and page sizes remain attached to URL parameters while navigating between pages.
 
 ### 5. 🎨 Modern Bootstrap 5 UI
-- Styled directory cards, filter control panels, responsive tables, badge highlights, and custom form cards.
+- Responsive layout with styled directory cards, filter control panels, tables, and badge highlights.
 - Dismissible Flask flash messages for **Add**, **Update**, and **Delete** actions.
-- "No records found" fallback banner with filter reset action.
+- Friendly alert messages for duplicate emails and empty records banner.
+
+---
+
+## 🗃️ Database Configuration (MySQL)
+
+This project uses **MySQL** database via **PyMySQL** driver.
+
+### 1. Create MySQL Database
+Ensure MySQL Server is running on your machine, then execute:
+```sql
+CREATE DATABASE employee_db;
+```
+
+### 2. Environment Variables / `.env` File
+Create a `.env` file in the project root directory to configure your MySQL credentials:
+```env
+MYSQL_USER=root
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DB=employee_db
+```
+
+*(Note: If no `.env` file is present, credentials can also be set via terminal environment variables: `$env:MYSQL_PASSWORD="your_password"`).*
 
 ---
 
@@ -38,14 +61,13 @@ A full-featured Flask web application with SQLAlchemy ORM, Jinja2 templates, and
 Flask-Development/
 ├── app/
 │   ├── models/
-│   │   ├── __init__.py           # Instantiates db = SQLAlchemy(), imports Employee
+│   │   ├── __init__.py           # Instantiates db = SQLAlchemy()
 │   │   └── employee.py           # Employee SQLAlchemy model schema
 │   ├── routes/
 │   │   ├── __init__.py           # Package marker
-│   │   ├── auth.py               # Authentication routes
-│   │   ├── department.py         # department_bp blueprint
+│   │   ├── department.py         # department_bp blueprint with aggregations
 │   │   ├── employee.py           # employee_bp blueprint with Search, Filter, Sort, Pagination & CRUD
-│   │   └── home.py               # home_bp blueprint
+│   │   └── home.py               # home_bp blueprint with dashboard statistics
 │   ├── static/
 │   │   ├── css/                  # Custom CSS styles
 │   │   └── js/                   # Custom JavaScript scripts
@@ -54,315 +76,80 @@ Flask-Development/
 │   │   ├── base.html             # Base layout with Bootstrap 5 CDN & flash alerts
 │   │   ├── department.html       # Department page template
 │   │   ├── employee.html         # Directory view with Search, Filter, Sort & Pagination
-│   │   ├── employee_detail.html   # Employee detail view template
-│   │   ├── home.html             # Landing page template
+│   │   ├── employee_detail.html  # Employee detail view template
+│   │   ├── home.html             # Dashboard template
 │   │   ├── navbar.html           # Bootstrap top navigation bar
 │   │   └── update_employee.html  # Employee update form template
-│   └── utils/
-│       └── __init__.py           # Utility modules
-├── app.py                        # Entry point starting create_app()
-├── config.py                     # App configuration (database URI, SECRET_KEY)
+│   └── __init__.py               # App factory create_app(), DB & migration initialization
+├── app.py                        # Main entry point starting app
+├── config.py                     # App configuration (MySQL URI, URL-encoding, dotenv)
+├── migrations/                   # Alembic database migration scripts
 ├── requirements.txt              # Dependencies list
 └── README.md                     # Project documentation
 ```
 
-
 ---
 
-# 🛠 Prerequisites
+## 🛠️ Setup & Execution Guide (For Evaluator / Clone Setup)
 
-- Python 3.11+
-- Git
-- VS Code (Recommended)
-
-Check your Python version
-
-```bash
-python --version
-```
-
-or
-
-```bash
-python3 --version
-```
-
----
-
-# 📥 Clone Repository
-
+### 1. Clone Repository & Move inside Project
 ```bash
 git clone https://github.com/suprit2005/Flask_Development.git
+cd Flask_Development
 ```
 
-Move inside the project
+### 2. Create & Activate Virtual Environment
 
-```bash
-cd Flask-Development
-```
+* **Windows (PowerShell)**:
+  ```powershell
+  python -m venv venv
+  .\venv\Scripts\Activate.ps1
+  ```
 
----
+* **Linux / macOS**:
+  ```bash
+  python3 -m venv venv
+  source venv/bin/activate
+  ```
 
-# 🐍 Create Virtual Environment
-
-## Windows
-
-```bash
-python -m venv venv
-```
-
-Activate
-
-### Command Prompt
-
-```cmd
-venv\Scripts\activate
-```
-
-### PowerShell
-
-```powershell
-venv\Scripts\Activate.ps1
-```
-
----
-
-## Linux / macOS
-
-```bash
-python3 -m venv venv
-```
-
-Activate
-
-```bash
-source venv/bin/activate
-```
-
----
-
-# 📦 Install Dependencies
-
-Upgrade pip
-
-```bash
-python -m pip install --upgrade pip
-```
-
-Install required packages
-
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
----
+### 4. Configure MySQL & Run Database Migrations
+1. Create the database in MySQL:
+   ```sql
+   CREATE DATABASE employee_db;
+   ```
+2. Create a `.env` file with your MySQL credentials, or set your password in the terminal:
+   ```powershell
+   $env:MYSQL_PASSWORD="your_mysql_password"
+   ```
+3. Initialize database tables:
+   ```bash
+   flask db upgrade
+   ```
 
-# ▶️ Run the Flask Application
-
-Run the application
-
+### 5. Run the Application
 ```bash
-python run.py
+python app.py
 ```
 
-or
-
-```bash
-flask run
-```
-
-Application will start on
-
-```
-http://127.0.0.1:5000
-```
-
----
-
-# 🔄 Deactivate Virtual Environment
-
-```bash
-deactivate
-```
+Application will start on:
+👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
 ---
 
-# 📌 Install New Package
+## 📋 Submission Checklist Status
 
-```bash
-pip install package_name
-```
-
-Update requirements
-
-```bash
-pip freeze > requirements.txt
-```
-
----
-
-# 🗃 Database Setup
-
-If using Flask SQLAlchemy
-
-Initialize database
-
-```python
-from app.models import db
-
-db.create_all()
-```
-
-Or using Flask Shell
-
-```bash
-flask shell
-```
-
-```python
-from app.models import db
-db.create_all()
-```
-
----
-
-# 📂 Environment Variables (Optional)
-
-Create a `.env`
-
-```
-SECRET_KEY=your-secret-key
-FLASK_ENV=development
-FLASK_DEBUG=True
-```
-
-Install dotenv
-
-```bash
-pip install python-dotenv
-```
-
----
-
-# 📚 Topics will be Covered
-
-- Flask Introduction
-- Routing
-- URL Parameters
-- HTTP Methods
-- Templates (Jinja2)
-- Template Inheritance
-- Static Files
-- Forms
-- WTForms
-- Flash Messages
-- Sessions
-- Cookies
-- Blueprints
-- SQLAlchemy ORM
-- CRUD Operations
-- Authentication
-- File Upload
-- Configuration
-- Error Handling
-- Pagination
-- Flask CLI
-- REST API Basics
-
----
-
-# 💻 Common Commands
-
-Create virtual environment
-
-```bash
-python -m venv venv
-```
-
-Activate
-
-Windows
-
-```cmd
-venv\Scripts\activate
-```
-
-Linux/macOS
-
-```bash
-source venv/bin/activate
-```
-
-Install requirements
-
-```bash
-pip install -r requirements.txt
-```
-
-Run application
-
-```bash
-python run.py
-```
-
-Deactivate
-
-```bash
-deactivate
-```
-
----
-
-# 📦 Generate requirements.txt
-
-```bash
-pip freeze > requirements.txt
-```
-
-Install from requirements
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# 🔍 Verify Installation
-
-```bash
-python
-```
-
-```python
-import flask
-print(flask.__version__)
-```
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome!
-
-1. Fork the repository
-2. Create a new branch
-
-```bash
-git checkout -b feature-name
-```
-
-3. Commit changes
-
-```bash
-git commit -m "Added new feature"
-```
-
-4. Push changes
-
-```bash
-git push origin feature-name
-```
-
-5. Create a Pull Request
-
----
+- [x] CRUD functionality working correctly
+- [x] Pagination implemented (5 or 10 records/page, Prev/Next buttons, page indicators)
+- [x] Search functionality implemented (Name, Email, Department)
+- [x] Sorting implemented (Name, Email, Department, Salary - ASC/DESC)
+- [x] Department filtering implemented
+- [x] Salary range filtering implemented
+- [x] Search, filtering, sorting, and pagination work together seamlessly
+- [x] UI improved using Bootstrap 5
+- [x] MySQL database support implemented via PyMySQL
+- [x] README.md updated with complete setup & execution guide
