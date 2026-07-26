@@ -139,17 +139,3 @@ python app.py
 Application will start on:
 👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
----
-
-## 📋 Submission Checklist Status
-
-- [x] CRUD functionality working correctly
-- [x] Pagination implemented (5 or 10 records/page, Prev/Next buttons, page indicators)
-- [x] Search functionality implemented (Name, Email, Department)
-- [x] Sorting implemented (Name, Email, Department, Salary - ASC/DESC)
-- [x] Department filtering implemented
-- [x] Salary range filtering implemented
-- [x] Search, filtering, sorting, and pagination work together seamlessly
-- [x] UI improved using Bootstrap 5
-- [x] MySQL database support implemented via PyMySQL
-- [x] README.md updated with complete setup & execution guide
